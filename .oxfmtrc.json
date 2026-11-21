@@ -5,5 +5,5 @@
   "tabWidth": 2,
   "trailingComma": "all",
   "printWidth": 100,
-  "ignorePatterns": [".tools/**", ".idea/**", "dist/**", "coverage/**", "package-lock.json"]
+  "ignorePatterns": [".tools/**", ".idea/**", "dist/**", "coverage/**", "pnpm-lock.yaml"]
 }

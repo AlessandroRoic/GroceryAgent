@@ -1,2 +1,2 @@
-npx --no-install lint-staged --concurrent false
-npm run typecheck
+pnpm exec lint-staged --concurrent false
+pnpm run typecheck

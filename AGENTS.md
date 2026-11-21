@@ -3,7 +3,7 @@
 ### Engineering standards
 
 Before changing code, tests, dependencies, or tooling, read `CODING_STANDARDS.md`.
-Apply the latest-stable tooling policy project-wide and run `npm run check` before review.
+Apply the latest-stable tooling policy project-wide and run `pnpm run check` before review.
 
 ### Issue tracker
 
