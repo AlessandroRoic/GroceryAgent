@@ -1,0 +1,10 @@
+node_modules/
+.tools/
+.cache/
+coverage/
+dist/
+.env
+.env.*
+!.env.example
+.idea/
+*.log
