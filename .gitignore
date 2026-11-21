@@ -10,3 +10,5 @@ dist/
 *.log
 /grocery.sqlite
 /grocery.sqlite-*
+/test-results/
+/playwright-report/

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { once } from "node:events";
 import { test } from "node:test";
+import { healthResponseSchema } from "@grocery-agent/contracts";
 import { createApp } from "./app.ts";
 
 await test("GET /health reports that the backend is running", async () => {
@@ -13,7 +14,8 @@ await test("GET /health reports that the backend is running", async () => {
     const response = await fetch(`http://127.0.0.1:${port}/health`);
     assert.equal(response.status, 200);
     assert.match(response.headers.get("content-type") ?? "", /application\/json/);
-    assert.deepEqual(await response.json(), { status: "ok" });
+    const body: unknown = await response.json();
+    assert.deepEqual(healthResponseSchema.parse(body), { status: "ok" });
   } finally {
     await new Promise<void>((resolve, reject) => {
       server.close((error) => (error ? reject(error) : resolve()));

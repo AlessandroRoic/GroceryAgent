@@ -5,5 +5,13 @@
   "tabWidth": 2,
   "trailingComma": "all",
   "printWidth": 100,
-  "ignorePatterns": [".tools/**", ".idea/**", "dist/**", "coverage/**", "pnpm-lock.yaml"]
+  "ignorePatterns": [
+    ".tools/**",
+    ".idea/**",
+    "**/dist/**",
+    "test-results/**",
+    "playwright-report/**",
+    "coverage/**",
+    "pnpm-lock.yaml"
+  ]
 }
