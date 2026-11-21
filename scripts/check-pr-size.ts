@@ -27,6 +27,16 @@ console.info(
   `${files.length}/${limit} (${points} story points) changed files (including docs, generated files, and lockfiles).`,
 );
 if (files.length > limit) {
-  console.error("Split the change into smaller pull requests.");
-  process.exitCode = 1;
+  const approval = process.env["SIZE_APPROVAL_URL"];
+  if (approval) {
+    console.info(`Repository owner approved the size exception: ${approval}`);
+  } else {
+    const head =
+      process.env["PR_HEAD_SHA"] ??
+      execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+    console.error(
+      `To approve this size exception, the repository owner can comment on this PR:\n/approve-pr-size ${head}\nThen re-run the failed PR size job.`,
+    );
+    process.exitCode = 1;
+  }
 }

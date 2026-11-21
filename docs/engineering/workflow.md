@@ -13,7 +13,10 @@ Make each PR one independently reviewable and revertible change. Link one primar
 | `3`          |                           30 |
 | `5`          |                           50 |
 
-Count the files in the PR diff against its target branch, including additions, edits, deletions, tests, docs, generated files, and lockfiles. Count a rename once. CI blocks a PR with a missing or invalid primary issue, a missing or ambiguous estimate, or a file count above the cap. It reports the estimate, count, and limit. Refresh the required size check when the diff, issue reference, or estimate changes, including field changes made without pushing a commit. If the PR exceeds the cap, split the work under the same issue. Re-estimate with the maintainer when the issue's scope warrants it.
+Count the files in the PR diff against its target branch, including additions, edits, deletions, tests, docs, generated files, and lockfiles. Count a rename once. CI blocks a PR with a missing or invalid primary issue, a missing or ambiguous estimate, or a file count above the cap. It reports the estimate, count, and limit. Refresh the required size check when the diff, issue reference, or estimate changes, including field changes made without pushing a commit. If the PR exceeds the cap, split the work or use one of the following options:
+
+- **Scope changed.** Update the primary issue’s Story points field with the maintainer’s agreement. Re-run the failed PR size job to read the new estimate and apply its usual cap.
+- **Size exception.** For a specific diff the repository owner accepts, copy the entire `/approve-pr-size <full head SHA>` line from the failed check into a standalone PR comment, then re-run the failed job. CI records the approval link in its output. A new commit requires a fresh approval. For example, this lets the owner accept 53 files on a 5-point issue while keeping the usual limit at 50.
 
 ## Commit messages
 

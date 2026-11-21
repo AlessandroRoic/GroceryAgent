@@ -66,6 +66,18 @@ jobs:
           points=$(gh api "repos/$GITHUB_REPOSITORY/issues/$issue/issue-field-values" --paginate --slurp |
             jq -er 'flatten | map(select(.issue_field_name == "Story points" and .data_type == "single_select")) | if length == 1 then .[0].single_select_option.name else empty end | select(. == "1" or . == "2" or . == "3" or . == "5")') || { echo "::error::Set the Story points field on issue #$issue to 1, 2, 3, or 5."; exit 1; }
           echo "STORY_POINTS=$points" >> "$GITHUB_ENV"
+      - name: Check for repository owner size approval
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          approval=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments?per_page=100" --paginate --slurp |
+            jq -r --arg owner "$GITHUB_REPOSITORY_OWNER" --arg command "/approve-pr-size $PR_HEAD_SHA" '
+              flatten | map(select(.user.login == $owner and .body == $command)) | last | .html_url // empty')
+          echo "SIZE_APPROVAL_URL=$approval" >> "$GITHUB_ENV"
       - run: node scripts/check-pr-size.ts
         env:
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
