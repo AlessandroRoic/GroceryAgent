@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://cubic.dev/schema/cubic-repository-config.schema.json
+version: 1
+reviews:
+  enabled: true
+  check_drafts: false
+  incremental_commits: false
+  resolve_threads_when_addressed: false
+  auto_approve: disabled
+  custom_instructions: |
+    Review the changed lines against the linked issue and the applicable
+    engineering guides listed in AGENTS.md. Use Conventional Comments.
+    Anchor each finding to the relevant line, explain a concrete failure
+    or cite the repository rule it violates, and suggest a fix.
+    When challenged, explain the reasoning with an example or withdraw
+    the finding if the code already handles it. The author applies fixes.
+issues:
+  auto_fix: "off"
+  pr_comment_fixes: false
+  fix_with_cubic_buttons: false
+pr_descriptions:
+  generate: false

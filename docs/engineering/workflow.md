@@ -47,3 +47,13 @@ The local pre-commit hook blocks a commit when any of those checks fails. CI req
 4. The maintainer reviews the final diff and CI results and merges the PR manually. Agents leave the merge to the maintainer. A GitHub approval is available when the maintainer is eligible to submit one. [GitHub review rules](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/approving-a-pull-request-with-required-reviews)
 
 See [open GroceryAgent PRs](https://github.com/AlessandroRoic/GroceryAgent/pulls) or run `gh pr list --state open` from the checkout. Drafts are still in progress. PRs marked ready are awaiting the maintainer's review.
+
+### Hosted second review
+
+Enable the [cubic GitHub App](https://github.com/apps/cubic-dev-ai) for GroceryAgent alone on its free public-repository plan. Keep its check optional in GitHub branch rules. The [repository configuration](../../cubic.yaml) requests one review when a PR is ready and skips drafts. cubic reads that file only from the default branch, so a configuration change applies after it merges; until then, cubic uses its dashboard settings.
+
+After pushing fixes, comment `@cubic-dev-ai incremental review` to review only the new changes, or `@cubic-dev-ai review this PR` for a full pass.
+
+To challenge a finding, reply in its thread and mention `@cubic-dev-ai`. Ask for the failing input or the repository rule that applies. The author decides whether to apply the suggestion or resolve the thread. cubic cannot push commits here: automatic fixes, fixes requested in PR comments, and fix buttons are all disabled.
+
+If cubic reaches a free usage limit or is unavailable, install [CodeRabbit](https://github.com/apps/coderabbitai) for GroceryAgent when first needed. While the repository has fewer than ten stars, trigger each review manually with `@coderabbitai review` on the PR. Reply to its inline findings for clarification and apply any fixes yourself. If both services are unavailable, proceed with the independent review and required checks above. [CodeRabbit review triggers](https://kb.coderabbit.ai/articles/8856795235-how-do-i-activate-coderabbit-pro-for-my-open-source-project)
