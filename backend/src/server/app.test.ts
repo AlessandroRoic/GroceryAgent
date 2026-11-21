@@ -40,8 +40,11 @@ await test("HTTP responses apply the Express security baseline", async () => {
   });
 });
 
-await test("a failed health request returns a client-safe API error", async () => {
-  const app = createApp();
+await test("a failed health request reports the failure and returns a client-safe API error", async () => {
+  let reportedErrors = 0;
+  const app = createApp(undefined, () => {
+    reportedErrors += 1;
+  });
   app.set("json replacer", () => {
     app.disable("json replacer");
     throw new Error("Internal diagnostic that must stay private");
@@ -53,5 +56,6 @@ await test("a failed health request returns a client-safe API error", async () =
     assert.match(response.headers.get("content-type") ?? "", /application\/json/);
     const body: unknown = await response.json();
     assert.deepEqual(apiErrorResponseSchema.parse(body), { message: "Internal server error" });
+    assert.equal(reportedErrors, 1);
   });
 });

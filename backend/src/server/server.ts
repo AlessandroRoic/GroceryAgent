@@ -17,7 +17,9 @@ if (process.argv.includes("--serve-frontend")) {
   frontendDirectory = fileURLToPath(frontend);
 }
 const database = openDatabase(process.env["DATABASE_PATH"] ?? "grocery.sqlite");
-const server = createApp(frontendDirectory).listen(port, host);
+const server = createApp(frontendDirectory, () => {
+  console.error("Unhandled API error. Returning HTTP 500.");
+}).listen(port, host);
 await once(server, "listening");
 const address = server.address();
 if (address && typeof address === "object") {
