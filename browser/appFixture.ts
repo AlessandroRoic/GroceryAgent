@@ -42,13 +42,13 @@ export const test = base.extend<{ appUrl: string }>({
             return;
           }
         }
-        throw new Error(`The app did not report a listening URL. ${stderr}`);
       } finally {
         clearTimeout(startupDeadline);
         stdout.close();
         server.kill();
         await closed;
       }
+      throw new Error(`The app did not report a listening URL. ${stderr}`);
     } finally {
       await rm(directory, { recursive: true, force: true });
     }

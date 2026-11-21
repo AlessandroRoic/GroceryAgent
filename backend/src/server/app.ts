@@ -1,7 +1,21 @@
 import express from "express";
-import type { Express } from "express";
+import type { ErrorRequestHandler, Express } from "express";
 import helmet from "helmet";
 import type { HealthResponse } from "@grocery-agent/contracts";
+import type { ApiErrorResponse } from "@grocery-agent/contracts/error-response";
+
+const sendApiError: ErrorRequestHandler<
+  Record<string, never>,
+  ApiErrorResponse,
+  unknown,
+  Record<string, never>
+> = (error: unknown, _request, response, next) => {
+  if (response.headersSent) {
+    next(error);
+    return;
+  }
+  response.status(500).json({ message: "Internal server error" });
+};
 
 export function createApp(frontendDirectory?: string): Express {
   const app = express();
@@ -13,7 +27,9 @@ export function createApp(frontendDirectory?: string): Express {
       response.set("Cache-Control", "no-store").json({ status: "ok" });
     },
   );
+  app.use(sendApiError);
   if (frontendDirectory !== undefined) {
+    app.set("env", "production");
     app.use(express.static(frontendDirectory));
   }
   return app;

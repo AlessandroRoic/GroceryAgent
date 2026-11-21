@@ -30,7 +30,19 @@
     "no-eval": "error",
     "no-new-func": "error",
     "no-console": "error",
-    "import/no-cycle": "error"
+    "import/no-cycle": "error",
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "express",
+            "importNames": ["default"],
+            "message": "Create Express apps only in backend/src/server/app.ts; import types with import type."
+          }
+        ]
+      }
+    ]
   },
   "overrides": [
     {
@@ -40,23 +52,6 @@
       "rules": {
         "node/no-sync": "error",
         "unicorn/prefer-node-protocol": "error"
-      }
-    },
-    {
-      "files": ["backend/**"],
-      "rules": {
-        "no-restricted-imports": [
-          "error",
-          {
-            "paths": [
-              {
-                "name": "express",
-                "importNames": ["default"],
-                "message": "Create Express apps only in backend/src/server/app.ts; import types with import type."
-              }
-            ]
-          }
-        ]
       }
     },
     { "files": ["backend/src/server/app.ts"], "rules": { "no-restricted-imports": "off" } },

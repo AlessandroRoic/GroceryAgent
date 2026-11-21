@@ -2,7 +2,10 @@
   "name": "@grocery-agent/contracts",
   "private": true,
   "type": "module",
-  "exports": "./health.ts",
+  "exports": {
+    ".": "./health.ts",
+    "./error-response": "./errorResponse.ts"
+  },
   "dependencies": {
     "zod": "4.6.7"
   }
