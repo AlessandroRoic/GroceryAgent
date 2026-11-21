@@ -1,9 +1,16 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "unicorn", "import", "node", "promise"],
+  "plugins": ["typescript", "unicorn", "import", "promise"],
   "categories": { "correctness": "error", "suspicious": "error", "perf": "error" },
-  "env": { "node": true },
-  "ignorePatterns": ["node_modules/**", ".tools/**", "dist/**", "coverage/**", ".idea/**"],
+  "ignorePatterns": [
+    "node_modules/**",
+    ".tools/**",
+    "**/dist/**",
+    "coverage/**",
+    ".idea/**",
+    "test-results/**",
+    "playwright-report/**"
+  ],
   "rules": {
     "typescript/no-explicit-any": "error",
     "typescript/consistent-type-imports": "error",
@@ -23,8 +30,6 @@
     "no-eval": "error",
     "no-new-func": "error",
     "no-console": "error",
-    "node/no-sync": "error",
-    "unicorn/prefer-node-protocol": "error",
     "import/no-cycle": "error",
     "no-restricted-imports": [
       "error",
@@ -40,8 +45,28 @@
     ]
   },
   "overrides": [
+    {
+      "files": ["backend/**", "browser/**", "*.config.*", "frontend/*.config.*"],
+      "env": { "node": true },
+      "plugins": ["node"],
+      "rules": {
+        "node/no-sync": "error",
+        "unicorn/prefer-node-protocol": "error"
+      }
+    },
     { "files": ["backend/src/server/app.ts"], "rules": { "no-restricted-imports": "off" } },
     { "files": ["backend/src/server/server.ts"], "rules": { "no-console": "off" } },
-    { "files": ["scripts/**"], "rules": { "node/no-sync": "off", "no-console": "off" } }
+    {
+      "files": ["scripts/**"],
+      "env": { "node": true },
+      "rules": { "no-console": "off", "unicorn/prefer-node-protocol": "error" }
+    },
+    { "files": ["frontend/src/**"], "env": { "browser": true } },
+    {
+      "files": ["frontend/src/**/*.test.ts"],
+      "rules": {
+        "import/no-unassigned-import": ["error", { "allow": ["@testing-library/jest-dom/vitest"] }]
+      }
+    }
   ]
 }

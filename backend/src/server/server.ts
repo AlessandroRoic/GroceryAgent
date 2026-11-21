@@ -1,4 +1,6 @@
 import { once } from "node:events";
+import { access } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 import { openDatabase } from "../db/openDatabase.ts";
 import { createApp } from "./app.ts";
 
@@ -8,8 +10,16 @@ if (!/^\d+$/.test(rawPort) || !Number.isInteger(port) || port > 65535) {
   throw new Error("PORT must be an integer between 0 and 65535");
 }
 const host = process.env["HOST"] ?? "127.0.0.1";
+const frontend = new URL("../../../frontend/dist/", import.meta.url);
+let frontendDirectory: string | undefined;
+if (process.argv.includes("--serve-frontend")) {
+  await access(new URL("index.html", frontend));
+  frontendDirectory = fileURLToPath(frontend);
+}
 const database = openDatabase(process.env["DATABASE_PATH"] ?? "grocery.sqlite");
-const server = createApp().listen(port, host);
+const server = createApp(frontendDirectory, () => {
+  console.error("Unhandled API error. Returning HTTP 500.");
+}).listen(port, host);
 await once(server, "listening");
 const address = server.address();
 if (address && typeof address === "object") {

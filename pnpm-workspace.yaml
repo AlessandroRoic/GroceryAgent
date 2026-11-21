@@ -1,2 +1,7 @@
+packages:
+  - backend
+  - frontend
+  - shared/contracts
+
 savePrefix: ""
 engineStrict: true
