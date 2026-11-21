@@ -1,0 +1,47 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "import", "node", "promise"],
+  "categories": { "correctness": "error", "suspicious": "error", "perf": "error" },
+  "env": { "node": true },
+  "ignorePatterns": ["node_modules/**", ".tools/**", "dist/**", "coverage/**", ".idea/**"],
+  "rules": {
+    "typescript/no-explicit-any": "error",
+    "typescript/consistent-type-imports": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/await-thenable": "error",
+    "typescript/no-unsafe-assignment": "error",
+    "typescript/no-unsafe-argument": "error",
+    "typescript/no-unsafe-call": "error",
+    "typescript/no-unsafe-member-access": "error",
+    "typescript/no-unsafe-return": "error",
+    "typescript/no-non-null-assertion": "error",
+    "eqeqeq": ["error", "always"],
+    "curly": ["error", "all"],
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-eval": "error",
+    "no-new-func": "error",
+    "no-console": "error",
+    "node/no-sync": "error",
+    "unicorn/prefer-node-protocol": "error",
+    "import/no-cycle": "error",
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "express",
+            "importNames": ["default"],
+            "message": "Create Express apps only in src/server/app.ts; import types with import type."
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    { "files": ["src/server/app.ts"], "rules": { "no-restricted-imports": "off" } },
+    { "files": ["src/server/server.ts"], "rules": { "no-console": "off" } },
+    { "files": ["scripts/**"], "rules": { "node/no-sync": "off", "no-console": "off" } }
+  ]
+}
