@@ -4,9 +4,13 @@
 
 <!-- Replace #NN with one primary issue number. Verify its Story points field is set on GitHub so CI can determine the file limit. Add a closing reference only when this PR completes the issue, including any required maintainer trial. -->
 
+## Summary
+
+<!-- Explain what changed in plain language. Use at most two short lines. -->
+
 ## What changed and why
 
-<!-- Describe the outcome and the reason for the change in one or two sentences. -->
+<!-- Describe the changes in more detail and explain why they were needed. -->
 
 ## Verification
 
