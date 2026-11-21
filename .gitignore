@@ -8,3 +8,5 @@ dist/
 !.env.example
 .idea/
 *.log
+/grocery.sqlite
+/grocery.sqlite-*

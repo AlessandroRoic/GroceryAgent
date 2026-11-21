@@ -33,15 +33,15 @@
           {
             "name": "express",
             "importNames": ["default"],
-            "message": "Create Express apps only in src/server/app.ts; import types with import type."
+            "message": "Create Express apps only in backend/src/server/app.ts; import types with import type."
           }
         ]
       }
     ]
   },
   "overrides": [
-    { "files": ["src/server/app.ts"], "rules": { "no-restricted-imports": "off" } },
-    { "files": ["src/server/server.ts"], "rules": { "no-console": "off" } },
+    { "files": ["backend/src/server/app.ts"], "rules": { "no-restricted-imports": "off" } },
+    { "files": ["backend/src/server/server.ts"], "rules": { "no-console": "off" } },
     { "files": ["scripts/**"], "rules": { "node/no-sync": "off", "no-console": "off" } }
   ]
 }

@@ -17,6 +17,8 @@ Before exploring domain concepts or architecture, read `docs/agents/domain.md`.
 
 ## Engineering standards
 
+Before working on a new issue, create a dedicated branch using the [branch workflow](docs/engineering/workflow.md#issue-branches).
+
 - [Shared coding standards](docs/engineering/coding-standards.md) — read before changing or reviewing code, tests, dependencies, or tooling.
 - [Engineering workflow](docs/engineering/workflow.md) — read before implementing, testing, or reviewing a change, or preparing a pull request.
 - [Frontend](docs/engineering/frontend.md) — read before changing or reviewing Vue code or component tests.
