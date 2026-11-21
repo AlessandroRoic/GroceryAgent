@@ -52,7 +52,7 @@ See [open GroceryAgent PRs](https://github.com/AlessandroRoic/GroceryAgent/pulls
 
 Enable the [cubic GitHub App](https://github.com/apps/cubic-dev-ai) for GroceryAgent alone on its free public-repository plan. Keep its check optional in GitHub branch rules. The [repository configuration](../../cubic.yaml) requests one review when a PR is ready and skips drafts. cubic reads that file only from the default branch, so a configuration change applies after it merges; until then, cubic uses its dashboard settings.
 
-After pushing fixes, comment `@cubic-dev-ai incremental review` to review only the new changes, or `@cubic-dev-ai review this PR` for a full pass.
+After pushing fixes, comment `@cubic-dev-ai incremental review` to review only the new changes, or `@cubic-dev-ai review this PR` for a full pass. Agents ask the maintainer before requesting a cubic review or posting a challenge.
 
 To challenge a finding, reply in its thread and mention `@cubic-dev-ai`. Ask for the failing input or the repository rule that applies. The author decides whether to apply the suggestion or resolve the thread. cubic cannot push commits here: automatic fixes, fixes requested in PR comments, and fix buttons are all disabled.
 

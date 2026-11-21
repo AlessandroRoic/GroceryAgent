@@ -26,4 +26,4 @@ Before exploring domain concepts or architecture, read `docs/agents/domain.md`.
 
 ## Secrets and protected files
 
-Never read or edit `.env`, `.env.*` other than `.env.example`, or key and credential files. Use `.env.example` to document configuration, and keep real secrets outside the checkout. The project [OpenCode configuration](opencode.jsonc) denies these paths, blocks access outside the repository, and asks before shell commands. Do not weaken those rules.
+Never read or edit `.env`, `.env.*` other than `.env.example`, or key and credential files. Use `.env.example` to document configuration, and keep real secrets outside the checkout. The project [OpenCode configuration](opencode.jsonc) denies these paths, blocks access outside the repository, and asks before shell commands that are not routine project commands. These rules reduce accidental access; they do not sandbox shell commands or code run through project scripts. Do not weaken them.
