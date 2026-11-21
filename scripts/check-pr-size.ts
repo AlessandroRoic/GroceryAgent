@@ -8,23 +8,10 @@ if (!base || !/^[a-f\d]{40}$/i.test(base)) {
 const config: unknown = JSON.parse(
   readFileSync(new URL("../.github/pr-size.json", import.meta.url), "utf8"),
 );
-const issueFile = process.env["PR_ISSUE_FILE"] ?? process.argv[3];
-if (!issueFile) {
-  throw new Error("Provide the linked issue body as PR_ISSUE_FILE or the second argument.");
-}
-const estimates = [
-  ...readFileSync(issueFile, "utf8").matchAll(/^\*\*Story points\*\*[ \t]+([1-9]\d*)[ \t]*\r?$/gim),
-];
-const points = estimates[0]?.[1];
-if (
-  estimates.length !== 1 ||
-  !points ||
-  !config ||
-  typeof config !== "object" ||
-  !Object.hasOwn(config, points)
-) {
+const points = process.env["STORY_POINTS"] ?? process.argv[3];
+if (!points || !config || typeof config !== "object" || !Object.hasOwn(config, points)) {
   throw new Error(
-    "Set one supported estimate in the linked issue: **Story points** 1, 2, 3, or 5.",
+    "Set one supported estimate in the linked issue: Story points must be 1, 2, 3, or 5.",
   );
 }
 const limit: unknown = Reflect.get(config, points);

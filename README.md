@@ -22,4 +22,4 @@ Run `pnpm run check` before pushing. It checks formatting, lint rules, types, te
 
 `pnpm install --frozen-lockfile` installs Git hooks: commits format and lint staged files and check project types; pushes run the complete checks. CI runs the same checks on Linux and Windows and enforces the PR file limit. Repository administrators can require the `Checks (ubuntu-latest)`, `Checks (windows-latest)`, and `PR size` checks in branch protection.
 
-Read [the shared coding standards](docs/engineering/coding-standards.md) before changing code or dependencies. Link the estimated issue with `Closes #number` so CI can apply its story-point file limit. Browser smoke tests will be added with Vue in #6/#7.
+Read [the shared coding standards](docs/engineering/coding-standards.md) before changing code or dependencies. Enter the issue number under Primary issue in the PR template. CI reads its Story points field to determine the file limit. Browser smoke tests will be added with Vue in #6/#7.

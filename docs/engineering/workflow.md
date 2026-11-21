@@ -4,16 +4,16 @@ Keep the Vue frontend in `frontend/` and the Express backend in `backend/`. Use 
 
 ## Scope and file limits
 
-Make each PR one independently reviewable and revertible change. Link one primary GroceryAgent issue in the PR template. The issue carries exactly one story-point label.
+Make each PR one independently reviewable and revertible change. Link one primary GroceryAgent issue in the PR template. Set the Story points single-select field on the primary issue.
 
-| Issue label | Maximum changed files per PR |
-| ----------- | ---------------------------: |
-| `points:1`  |                           10 |
-| `points:2`  |                           20 |
-| `points:3`  |                           30 |
-| `points:5`  |                           50 |
+| Story points | Maximum changed files per PR |
+| ------------ | ---------------------------: |
+| `1`          |                           10 |
+| `2`          |                           20 |
+| `3`          |                           30 |
+| `5`          |                           50 |
 
-Count the files in the PR diff against its target branch, including additions, edits, deletions, tests, docs, generated files, and lockfiles. Count a rename once. CI blocks a PR with a missing or invalid primary issue, a missing or ambiguous estimate, or a file count above the cap. It reports the estimate, count, and limit. Refresh the required size check when the diff, issue reference, or estimate changes, including label changes made without pushing a commit. If the PR exceeds the cap, split the work under the same issue. Re-estimate with the maintainer when the issue's scope warrants it.
+Count the files in the PR diff against its target branch, including additions, edits, deletions, tests, docs, generated files, and lockfiles. Count a rename once. CI blocks a PR with a missing or invalid primary issue, a missing or ambiguous estimate, or a file count above the cap. It reports the estimate, count, and limit. Refresh the required size check when the diff, issue reference, or estimate changes, including field changes made without pushing a commit. If the PR exceeds the cap, split the work under the same issue. Re-estimate with the maintainer when the issue's scope warrants it.
 
 ## Commit messages
 

@@ -60,12 +60,12 @@ jobs:
       - name: Read the linked issue estimate
         env:
           GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+        shell: bash
         run: |
-          gh api graphql -F owner="${GITHUB_REPOSITORY%/*}" -F repo="${GITHUB_REPOSITORY#*/}" -F number="$PR_NUMBER" \
-            -f query='query($owner:String!, $repo:String!, $number:Int!) { repository(owner:$owner,name:$repo) { pullRequest(number:$number) { closingIssuesReferences(first:2) { totalCount nodes { body repository { nameWithOwner } } } } } }' |
-            jq -er --arg repo "$GITHUB_REPOSITORY" '.data.repository.pullRequest.closingIssuesReferences | if .totalCount == 1 and .nodes[0].repository.nameWithOwner == $repo then .nodes[0].body else error("Link one estimated issue using Closes #number in the PR description.") end' > "$RUNNER_TEMP/size-issue.md"
+          issue=$(jq -er '.pull_request.body | gsub("\r"; "") | capture("(?m)^## Primary issue[ \\t]*\\n\\s*#(?<id>[1-9][0-9]*)[ \\t]*$").id' "$GITHUB_EVENT_PATH") || { echo "::error::Enter #number under Primary issue in the PR template."; exit 1; }
+          points=$(gh api "repos/$GITHUB_REPOSITORY/issues/$issue/issue-field-values" --paginate --slurp |
+            jq -er 'flatten | map(select(.issue_field_name == "Story points" and .data_type == "single_select")) | if length == 1 then .[0].single_select_option.name else empty end | select(. == "1" or . == "2" or . == "3" or . == "5")') || { echo "::error::Set the Story points field on issue #$issue to 1, 2, 3, or 5."; exit 1; }
+          echo "STORY_POINTS=$points" >> "$GITHUB_ENV"
       - run: node scripts/check-pr-size.ts
         env:
-          PR_ISSUE_FILE: ${{ runner.temp }}/size-issue.md
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
