@@ -26,4 +26,6 @@ Before exploring domain concepts or architecture, read `docs/agents/domain.md`.
 
 ## Secrets and protected files
 
-Never read or edit `.env`, `.env.*` other than `.env.example`, or key and credential files. Use `.env.example` to document configuration, and keep real secrets outside the checkout. The project [OpenCode configuration](opencode.jsonc) denies these paths, blocks access outside the repository, and asks before shell commands that are not routine project commands. These rules reduce accidental access; they do not sandbox shell commands or code run through project scripts. Do not weaken them.
+Never read or edit `.env`, `.env.*` other than `.env.example`, or key and credential files. Use `.env.example` to document configuration, and keep real secrets outside the checkout.
+
+The project [OpenCode configuration](opencode.jsonc) denies these paths and blocks access outside the repository. The [Codex configuration](.codex/config.toml) runs in the `workspace-write` sandbox with on-request approvals and [command rules](.codex/rules/default.rules) that prompt before commits, pushes, and GitHub changes. Codex still reads files inside the workspace, so keeping secrets outside the checkout is what protects them. These rules reduce accidental access; they do not sandbox shell commands or code run through project scripts. Do not weaken them.

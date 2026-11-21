@@ -1,0 +1,8 @@
+# Codex loads this file only for trusted projects, and CLI flags still override it.
+# The workspace-write sandbox limits writes, not reads: keep real secrets outside the checkout.
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+allow_login_shell = false
+
+[sandbox_workspace_write]
+network_access = false

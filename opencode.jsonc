@@ -32,6 +32,7 @@
     // Protect the rules and CI from silent edits.
     { "action": "edit", "resource": "opencode.jsonc", "effect": "deny" },
     { "action": "edit", "resource": ".opencode/**", "effect": "deny" },
+    { "action": "edit", "resource": ".codex/**", "effect": "deny" },
     { "action": "edit", "resource": ".github/workflows/**", "effect": "deny" },
 
     // No files outside this project, such as ~/.ssh or ~/.aws.
@@ -101,6 +102,7 @@
     { "action": "tool.use", "resource": "edit:.git/config", "effect": "deny" },
     { "action": "tool.use", "resource": "edit:opencode.jsonc", "effect": "deny" },
     { "action": "tool.use", "resource": "edit:.opencode/**", "effect": "deny" },
+    { "action": "tool.use", "resource": "edit:.codex/**", "effect": "deny" },
     { "action": "tool.use", "resource": "edit:.github/workflows/**", "effect": "deny" },
     { "action": "tool.use", "resource": "external_directory:*", "effect": "deny" },
     { "action": "tool.use", "resource": "subagent:*", "effect": "deny" },
