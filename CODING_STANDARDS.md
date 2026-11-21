@@ -30,7 +30,7 @@ The initial verified toolchain uses Node's native TypeScript execution, the Type
 | Live HTTP health response and security headers, validated startup configuration, process shutdown                             | Node integration tests                                                                    |
 | Small PRs                                                                                                                     | `.github/pr-size.json` and CI; all changed files count, including deletions and lockfiles |
 
-The initial PR cap is **30 files**, a provisional default pending maintainer review in #3. Change the versioned policy in a reviewed change when a different cap is agreed.
+Link one issue using `Closes #number` in the PR description. CI reads its `**Story points**` estimate. The file limits are 10 for 1 point, 20 for 2 points, 30 for 3 points, and 50 for 5 points. A missing or unsupported estimate fails the check.
 
 ## Testing and review
 

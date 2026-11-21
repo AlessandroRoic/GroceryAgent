@@ -3,6 +3,7 @@ name: Project checks
 on:
   push:
   pull_request:
+    types: [opened, synchronize, reopened, edited]
 
 permissions:
   contents: read
@@ -34,6 +35,10 @@ jobs:
 
   pr-size:
     name: PR size
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -45,6 +50,15 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .node-version
+      - name: Read the linked issue estimate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          gh api graphql -F owner="${GITHUB_REPOSITORY%/*}" -F repo="${GITHUB_REPOSITORY#*/}" -F number="$PR_NUMBER" \
+            -f query='query($owner:String!, $repo:String!, $number:Int!) { repository(owner:$owner,name:$repo) { pullRequest(number:$number) { closingIssuesReferences(first:2) { totalCount nodes { body repository { nameWithOwner } } } } } }' |
+            jq -er --arg repo "$GITHUB_REPOSITORY" '.data.repository.pullRequest.closingIssuesReferences | if .totalCount == 1 and .nodes[0].repository.nameWithOwner == $repo then .nodes[0].body else error("Link one estimated issue using Closes #number in the PR description.") end' > "$RUNNER_TEMP/size-issue.md"
       - run: node scripts/check-pr-size.ts
         env:
+          PR_ISSUE_FILE: ${{ runner.temp }}/size-issue.md
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}

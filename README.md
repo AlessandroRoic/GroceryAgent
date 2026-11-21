@@ -22,4 +22,4 @@ Run `npm run check` before pushing. It checks formatting, lint rules, types, tes
 
 `npm ci` installs Git hooks: commits format and lint staged files and check project types; pushes run the complete checks. CI runs the same checks on Linux and Windows and enforces the PR file limit. Repository administrators can require the `Checks (ubuntu-latest)`, `Checks (windows-latest)`, and `PR size` checks in branch protection.
 
-Read [the coding standards](CODING_STANDARDS.md) before changing code or dependencies. The PR size limit is a provisional implementation default; maintainer review of the broader standards remains tracked in [#3](https://github.com/AlessandroRoic/GroceryAgent/issues/3). Browser smoke tests will be added with Vue in #6/#7.
+Read [the coding standards](CODING_STANDARDS.md) before changing code or dependencies. Link the estimated issue with `Closes #number` so CI can apply its story-point file limit. Browser smoke tests will be added with Vue in #6/#7.
