@@ -1,42 +1,70 @@
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
+import { execFile, spawn } from "node:child_process";
 import { once } from "node:events";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { DatabaseSync } from "node:sqlite";
 import { createInterface } from "node:readline";
-import { test } from "node:test";
+import { test, type TestContext } from "node:test";
+import { promisify } from "node:util";
+
+async function startAndStopServer(context: TestContext, databasePath: string): Promise<void> {
+  const child = spawn(process.execPath, ["src/server/server.ts"], {
+    env: { ...process.env, HOST: "127.0.0.1", PORT: "0", DATABASE_PATH: databasePath },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  context.after(() => {
+    child.kill();
+  });
+  const exited = once(child, "exit");
+  const lines = createInterface({ input: child.stdout });
+  context.after(() => {
+    lines.close();
+  });
+  const lineEvent: unknown[] = await once(lines, "line");
+  const [line] = lineEvent;
+  assert.equal(typeof line, "string");
+  const match = /Listening on http:\/\/127\.0\.0\.1:(\d+)/.exec(String(line));
+  assert.ok(match?.[1], "startup reports the actual listening port");
+  const response = await fetch(`http://127.0.0.1:${match[1]}/health`);
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { status: "ok" });
+  child.kill("SIGTERM");
+  const exitEvent: unknown[] = await exited;
+  const [code, signal] = exitEvent;
+  if (process.platform === "win32") {
+    assert.equal(signal, "SIGTERM");
+  } else {
+    assert.equal(code, 0);
+    assert.equal(signal, null);
+  }
+}
 
 await test(
-  "the entry point serves HTTP on its configured host and port and shuts down",
-  { timeout: 10_000 },
+  "server initializes the configured database and preserves it on restart",
+  { timeout: 15_000 },
   async (context) => {
-    const child = spawn(process.execPath, ["src/server/server.ts"], {
-      env: { ...process.env, HOST: "127.0.0.1", PORT: "0" },
-      stdio: ["ignore", "pipe", "pipe"],
-    });
-    context.after(() => {
-      child.kill();
-    });
-    const exited = once(child, "exit");
-    const lines = createInterface({ input: child.stdout });
-    context.after(() => {
-      lines.close();
-    });
-    const lineEvent: unknown[] = await once(lines, "line");
-    const [line] = lineEvent;
-    assert.equal(typeof line, "string");
-    const match = /Listening on http:\/\/127\.0\.0\.1:(\d+)/.exec(String(line));
-    assert.ok(match?.[1], "startup reports the actual listening port");
-    const response = await fetch(`http://127.0.0.1:${match[1]}/health`);
-    assert.equal(response.status, 200);
-    assert.deepEqual(await response.json(), { status: "ok" });
-    child.kill("SIGTERM");
-    const exitEvent: unknown[] = await exited;
-    const [code, signal] = exitEvent;
-    if (process.platform === "win32") {
-      assert.equal(signal, "SIGTERM");
-    } else {
-      assert.equal(code, 0);
-      assert.equal(signal, null);
+    const directory = await mkdtemp(join(tmpdir(), "grocery-agent-"));
+    context.after(() => rm(directory, { recursive: true, force: true }));
+    const path = join(directory, "household.sqlite");
+    await startAndStopServer(context, path);
+    {
+      using db = new DatabaseSync(path);
+      assert.ok(db.prepare("SELECT version FROM schema_migrations WHERE version = 1").get());
+      db.exec(
+        "CREATE TABLE restart_probe (value TEXT); INSERT INTO restart_probe VALUES ('saved')",
+      );
     }
+    await startAndStopServer(context, path);
+    using db = new DatabaseSync(path, { readOnly: true });
+    assert.equal(db.prepare("SELECT value FROM restart_probe").get()?.["value"], "saved");
+    assert.equal(
+      db.prepare("SELECT count(*) AS count FROM schema_migrations WHERE version = 1").get()?.[
+        "count"
+      ],
+      1,
+    );
   },
 );
 
@@ -65,3 +93,13 @@ await test(
     );
   },
 );
+
+await test("startup rejects a SQLite URI without a backing file", async () => {
+  await assert.rejects(
+    promisify(execFile)(process.execPath, ["src/server/server.ts"], {
+      env: { ...process.env, PORT: "0", DATABASE_PATH: "file::memory:?cache=shared" },
+      timeout: 5000,
+    }),
+    { code: 1, stderr: /DATABASE_PATH must name a SQLite file/ },
+  );
+});

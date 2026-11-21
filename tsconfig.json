@@ -20,5 +20,5 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": false
   },
-  "include": ["src/**/*.ts", "scripts/**/*.ts", "lint-staged.config.js"]
+  "include": ["src/**/*.ts", "backend/src/**/*.ts", "scripts/**/*.ts", "lint-staged.config.js"]
 }
