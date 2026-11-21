@@ -85,8 +85,8 @@ await test(
         child.stderr.setEncoding("utf8").on("data", (chunk: string) => {
           stderr += chunk;
         });
-        const exitEvent: unknown[] = await once(child, "exit");
-        const [code] = exitEvent;
+        const closeEvent: unknown[] = await once(child, "close");
+        const [code] = closeEvent;
         assert.notEqual(code, 0, `PORT=${port} must fail startup`);
         assert.match(stderr, /PORT must be an integer between 0 and 65535/);
       }),
