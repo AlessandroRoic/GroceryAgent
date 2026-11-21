@@ -29,16 +29,33 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", "push", ["-f", "--force"]],
+    pattern = ["git", "push", ["-f", "--force", "--force-with-lease"]],
     decision = "forbidden",
     justification = "Force-pushes rewrite shared history; add a new commit instead",
     match = [
         "git push -f",
         "git push --force",
+        "git push --force-with-lease",
     ],
     not_match = [
         "git push origin issue-70-cubic-review",
     ],
+)
+
+# Prefix rules cannot inspect all later arguments. Require review of every
+# staging command so reordered or combined options cannot pass silently.
+prefix_rule(
+    pattern = ["git", "add"],
+    decision = "prompt",
+    justification = "Review the paths and options before staging files",
+    match = ["git add -- src", "git add --all --force notes.txt"],
+)
+
+prefix_rule(
+    pattern = ["git", "add", ["-A", "--all"], ["-f", "--force"]],
+    decision = "forbidden",
+    justification = "Force-adding can stage ignored files",
+    match = ["git add --all --force notes.txt"],
 )
 
 prefix_rule(
