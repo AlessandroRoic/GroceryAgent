@@ -1,0 +1,125 @@
+# Commands that need approval before they leave the workspace-write sandbox.
+# When several rules match, the most restrictive decision wins:
+# forbidden > prompt > allow.
+
+prefix_rule(
+    pattern = ["git", "commit"],
+    decision = "prompt",
+    justification = "The maintainer approves commits before they are created",
+    match = [
+        "git commit -m \"docs: clarify setup\"",
+        "git commit --amend --no-edit",
+    ],
+    not_match = [
+        "git status",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "Pushes change the remote branch; the maintainer approves them",
+    match = [
+        "git push",
+        "git push -u origin issue-70-cubic-review",
+    ],
+    not_match = [
+        "git fetch origin",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "push", ["-f", "--force", "--force-with-lease"]],
+    decision = "forbidden",
+    justification = "Force-pushes rewrite shared history; add a new commit instead",
+    match = [
+        "git push -f",
+        "git push --force",
+        "git push --force-with-lease",
+    ],
+    not_match = [
+        "git push origin issue-70-cubic-review",
+    ],
+)
+
+# Prefix rules cannot inspect all later arguments. Require review of every
+# staging command so reordered or combined options cannot pass silently.
+prefix_rule(
+    pattern = ["git", "add"],
+    decision = "prompt",
+    justification = "Review the paths and options before staging files",
+    match = ["git add -- src", "git add --all --force notes.txt"],
+)
+
+prefix_rule(
+    pattern = ["git", "add", ["-A", "--all"], ["-f", "--force"]],
+    decision = "forbidden",
+    justification = "Force-adding can stage ignored files",
+    match = ["git add --all --force notes.txt"],
+)
+
+prefix_rule(
+    pattern = ["git", "add", ["-f", "--force"]],
+    decision = "forbidden",
+    justification = "Force-adding can stage ignored files such as .env; add explicit paths instead",
+    match = [
+        "git add -f .env",
+        "git add --force notes.txt",
+    ],
+    not_match = [
+        "git add src",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", ["create", "edit", "comment", "review", "ready", "close", "reopen"]],
+    decision = "prompt",
+    justification = "PR changes are published on GitHub; the maintainer approves them",
+    match = [
+        "gh pr comment 72 --body \"@cubic-dev-ai incremental review\"",
+        "gh pr edit 72 --body-file body.md",
+    ],
+    not_match = [
+        "gh pr view 72",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "merge"],
+    decision = "forbidden",
+    justification = "Agents leave merges to the maintainer",
+    match = [
+        "gh pr merge 72",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "issue", ["create", "edit", "comment", "close", "reopen", "delete"]],
+    decision = "prompt",
+    justification = "Issue changes are published on GitHub; the maintainer approves them",
+    match = [
+        "gh issue comment 70 --body \"done\"",
+    ],
+    not_match = [
+        "gh issue view 70",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "api"],
+    decision = "prompt",
+    justification = "Raw API calls can change repository settings",
+    match = [
+        "gh api repos/AlessandroRoic/GroceryAgent/rulesets",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "auth"],
+    decision = "forbidden",
+    justification = "Agents must not change the maintainer's GitHub credentials",
+    match = [
+        "gh auth login",
+        "gh auth token",
+    ],
+)
