@@ -4,7 +4,7 @@ Keep the Vue frontend in `frontend/` and the Express backend in `backend/`. Use 
 
 ## Scope and file limits
 
-Make each PR one independently reviewable and revertible change. Link one primary GroceryAgent issue in the PR template. Set the Story points single-select field on the primary issue.
+Make each PR one independently reviewable and revertible change. Link one primary GroceryAgent issue in the PR template. Read its **Story points** field to determine the file limit. The [issue-tracker guide](../agents/issue-tracker.md#story-points) explains how to set and verify the estimate.
 
 | Story points | Maximum changed files per PR |
 | ------------ | ---------------------------: |

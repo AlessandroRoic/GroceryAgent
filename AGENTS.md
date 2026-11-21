@@ -3,7 +3,7 @@
 ### Issue tracker
 
 Issues live in GitHub Issues for AlessandroRoic/GroceryAgent.
-Before reading or publishing issues, read `docs/agents/issue-tracker.md`.
+Before reading, creating, or estimating an issue, read the [issue-tracker guide](docs/agents/issue-tracker.md). Use the primary issue’s native **Story points** field as the source of its estimate.
 
 ### Triage labels
 

@@ -22,6 +22,18 @@ Use docs/agents/triage-labels.md for triage label names.
 When a skill says "publish to the issue tracker", create a GitHub issue.
 When it says "fetch the relevant ticket", read the referenced GitHub issue.
 
+## Story points
+
+When creating or estimating an implementation issue, set the agreed estimate in GitHub’s **Story points** single-select field. The supported options are `1`, `2`, `3`, and `5`. Older issues may mention points in their body or labels. Use the field for planning and PR checks.
+
+Read the selected option with the GitHub CLI (replace `4` with the issue number):
+
+```sh
+gh api repos/AlessandroRoic/GroceryAgent/issues/4/issue-field-values --jq '.[] | select(.issue_field_name == "Story points" and .data_type == "single_select") | .single_select_option.name'
+```
+
+The option name is the estimate. The API’s numeric `value` is an option ID. If the command succeeds with no output, the issue has no visible estimate. Confirm the estimate and set it in the issue sidebar before using that issue as a PR’s primary issue. See the [engineering workflow](../engineering/workflow.md#scope-and-file-limits) for the corresponding file limit.
+
 ## Parent issues and dependencies
 
 Use native GitHub sub-issues for parent-child relationships and native
