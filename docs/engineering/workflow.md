@@ -2,6 +2,10 @@
 
 Keep the Vue frontend in `frontend/` and the Express backend in `backend/`. Use strict TypeScript throughout. Use `PascalCase` for types and `camelCase` for functions and values. Name functions for their behavior and keep helpers private to their module until another module needs them. Follow the project glossary for household terms. [Domain docs](../agents/domain.md) · [V1 spec](https://github.com/AlessandroRoic/GroceryAgent/issues/1) · [TypeScript strict mode](https://www.typescriptlang.org/tsconfig/strict.html)
 
+## Issue branches
+
+Before starting a new issue, create a dedicated branch from the latest remote default branch. Name it `<type>/<issue-number>-<short-kebab-case-slug>`, for example `feat/5-sqlite-migrations` or `docs/3-engineering-standards`. Keep commits and the PR for that issue on its dedicated branch. Resume the existing branch when continuing work on the same issue.
+
 ## Scope and file limits
 
 Make each PR one independently reviewable and revertible change. Link one primary GroceryAgent issue in the PR template. Read its **Story points** field to determine the file limit. The [issue-tracker guide](../agents/issue-tracker.md#story-points) explains how to set and verify the estimate.

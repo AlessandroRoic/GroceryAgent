@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": { "rootDir": ".", "outDir": "dist", "sourceMap": true },
-  "include": ["src/**/*.ts", "backend/src/**/*.ts"],
-  "exclude": ["**/*.test.ts"]
+  "compilerOptions": { "rootDir": "backend/src", "outDir": "dist", "sourceMap": true },
+  "include": ["backend/src/**/*.ts"],
+  "exclude": ["backend/src/**/*.test.ts"]
 }

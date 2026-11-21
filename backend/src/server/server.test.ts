@@ -10,7 +10,7 @@ import { test, type TestContext } from "node:test";
 import { promisify } from "node:util";
 
 async function startAndStopServer(context: TestContext, databasePath: string): Promise<void> {
-  const child = spawn(process.execPath, ["src/server/server.ts"], {
+  const child = spawn(process.execPath, ["backend/src/server/server.ts"], {
     env: { ...process.env, HOST: "127.0.0.1", PORT: "0", DATABASE_PATH: databasePath },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -74,7 +74,7 @@ await test(
   async (context) => {
     await Promise.all(
       ["abc", "3000oops", "-1", "65536", "1.5", ""].map(async (port) => {
-        const child = spawn(process.execPath, ["src/server/server.ts"], {
+        const child = spawn(process.execPath, ["backend/src/server/server.ts"], {
           env: { ...process.env, PORT: port },
           stdio: ["ignore", "ignore", "pipe"],
         });
@@ -96,7 +96,7 @@ await test(
 
 await test("startup rejects a SQLite URI without a backing file", async () => {
   await assert.rejects(
-    promisify(execFile)(process.execPath, ["src/server/server.ts"], {
+    promisify(execFile)(process.execPath, ["backend/src/server/server.ts"], {
       env: { ...process.env, PORT: "0", DATABASE_PATH: "file::memory:?cache=shared" },
       timeout: 5000,
     }),

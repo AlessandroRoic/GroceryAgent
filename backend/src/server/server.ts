@@ -1,5 +1,5 @@
 import { once } from "node:events";
-import { openDatabase } from "../../backend/src/db/openDatabase.ts";
+import { openDatabase } from "../db/openDatabase.ts";
 import { createApp } from "./app.ts";
 
 const rawPort = process.env["PORT"] ?? "3000";

@@ -18,7 +18,7 @@ Open <http://127.0.0.1:3000/health>. It returns HTTP 200 and `{"status":"ok"}`. 
 
 ## Develop
 
-Run `pnpm run check` before pushing. It checks formatting, lint rules, types, tests, and compilation. Run a single test with `node --test src/server/app.test.ts`. `pnpm run format` applies formatting and `pnpm run lint:fix` applies lint fixes.
+Run `pnpm run check` before pushing. It checks formatting, lint rules, types, tests, and compilation. Run a single test with `node --test backend/src/server/app.test.ts`. `pnpm run format` applies formatting and `pnpm run lint:fix` applies lint fixes.
 
 `pnpm install --frozen-lockfile` installs Git hooks: commits format and lint staged files and check project types; pushes run the complete checks. CI runs the same checks on Linux and Windows and enforces the PR file limit. Repository administrators can require the `Checks (ubuntu-latest)`, `Checks (windows-latest)`, and `PR size` checks in branch protection.
 
