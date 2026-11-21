@@ -23,3 +23,7 @@ Before exploring domain concepts or architecture, read `docs/agents/domain.md`.
 - [Backend](docs/engineering/backend.md) — read before changing or reviewing Express, server workflows, or backend tests.
 - [Database](docs/engineering/database.md) — read before changing or reviewing SQLite queries, migrations, or persistence tests.
 - [API contracts](docs/engineering/contracts.md) — read before changing or reviewing the HTTP interface between Vue and Express.
+
+## Secrets and protected files
+
+Never read or edit `.env`, `.env.*` other than `.env.example`, or key and credential files. Use `.env.example` to document configuration, and keep real secrets outside the checkout. The project [OpenCode configuration](opencode.jsonc) denies these paths, blocks access outside the repository, and asks before shell commands. Do not weaken those rules.
