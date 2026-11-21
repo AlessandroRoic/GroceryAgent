@@ -15,6 +15,10 @@ Make each PR one independently reviewable and revertible change. Link one primar
 
 Count the files in the PR diff against its target branch, including additions, edits, deletions, tests, docs, generated files, and lockfiles. Count a rename once. CI blocks a PR with a missing or invalid primary issue, a missing or ambiguous estimate, or a file count above the cap. It reports the estimate, count, and limit. Refresh the required size check when the diff, issue reference, or estimate changes, including label changes made without pushing a commit. If the PR exceeds the cap, split the work under the same issue. Re-estimate with the maintainer when the issue's scope warrants it.
 
+## Commit messages
+
+Use Conventional Commits for each commit. Write a type, an optional scope, and a short description, for example `feat(api): add health endpoint` or `docs: clarify local setup`. For a breaking change, add `!` before the colon or a `BREAKING CHANGE:` footer. The Husky commit-msg hook checks the message locally, and PR CI checks the commits introduced by the branch using the same commitlint preset.
+
 ## Required checks
 
 Scaffolding wires up the following checks using the same commands locally and in CI.
